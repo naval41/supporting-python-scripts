@@ -1,0 +1,7 @@
+{
+    "title": "Monolithic vs Microservices: The Architecture Decision That'll Make or Break",
+    "excerpt": "So you're sitting there, staring at your screen, trying to figure out whether to build your next app as one big monolith or split it into a bunch of microservices. Trust me, I've been there. This decision feels huge because, well, it kind of is. Get it wrong and you'll be dealing with the consequences for years.",
+    "slug": "monolithic-vs-microservices-the-architecture-decision-thatll-make-or-break",
+    "time_to_read": "25 min read",
+    "tags": "microservices, monolith, software architecture, system design, distributed systems"
+}

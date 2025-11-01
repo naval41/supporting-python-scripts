@@ -1,0 +1,7 @@
+# AWS Configuration - DO NOT COMMIT
+aws_config.json
+
+# Output files (optional - you might want to commit these)
+# output/
+
+

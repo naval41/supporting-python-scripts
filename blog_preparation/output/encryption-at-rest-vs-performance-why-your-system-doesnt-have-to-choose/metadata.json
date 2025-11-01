@@ -1,0 +1,7 @@
+{
+    "title": "Encryption at Rest vs Performance: Why Your System Doesn't Have to Choose",
+    "excerpt": "Ever been in that meeting where someone says \"we need to encrypt everything\" and another person immediately goes \"but what about performance\"? Yeah, we've all been there. It's like watching two people argue about whether pizza or tacos are better when you could just have both. Here's the thing about encryption at rest vs performance: it's not really an either/or situation anymore. Sure, there are trade-offs, but with the right approach, you can have your security cake and eat it with decent performance too.",
+    "slug": "encryption-at-rest-vs-performance-why-your-system-doesnt-have-to-choose",
+    "time_to_read": "8 min read",
+    "tags": "encryption, performance, security, data-protection, optimization"
+}
