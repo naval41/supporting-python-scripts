@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from typing import Dict, Any
 import html
+from twitter_post import call_bedrock_for_twitter_thread
 
 # Load environment variables from .env file if it exists
 def load_env_file():
@@ -24,9 +25,15 @@ def load_env_file():
 load_env_file()
 
 
-def load_aws_config(config_file: Path) -> Dict[str, str]:
+def load_aws_config(config_file: Path) -> Dict[str, Any]:
     """
     Load AWS configuration from config file.
+    
+    Supports two formats:
+    1. Flat structure (backward compatible):
+       {"aws_access_key_id": "...", "aws_secret_access_key": "..."}
+    2. Nested structure (for separate credentials):
+       {"s3": {"aws_access_key_id": "...", ...}, "bedrock": {"aws_access_key_id": "...", ...}}
     
     Args:
         config_file: Path to the config file
@@ -43,20 +50,23 @@ def load_aws_config(config_file: Path) -> Dict[str, str]:
         return {}
 
 
-def create_bedrock_client(config: Dict[str, str]) -> any:
+def create_bedrock_client(config: Dict[str, Any]) -> any:
     """
     Create boto3 bedrock client with credentials from config.
     
     Args:
-        config: AWS configuration dictionary
+        config: AWS configuration dictionary (can be nested with 'bedrock' key or flat)
         
     Returns:
         boto3 bedrock client
     """
     try:
+        # Support nested config structure: config['bedrock'] or flat structure
+        bedrock_config = config.get('bedrock', config)
+        
         session = boto3.Session(
-            aws_access_key_id=config.get('aws_access_key_id'),
-            aws_secret_access_key=config.get('aws_secret_access_key'),
+            aws_access_key_id=bedrock_config.get('aws_access_key_id'),
+            aws_secret_access_key=bedrock_config.get('aws_secret_access_key'),
             region_name='ap-south-1'
         )
         bedrock = session.client(service_name='bedrock-runtime')
@@ -66,20 +76,23 @@ def create_bedrock_client(config: Dict[str, str]) -> any:
         return None
 
 
-def create_s3_client(config: Dict[str, str]) -> any:
+def create_s3_client(config: Dict[str, Any]) -> any:
     """
     Create boto3 S3 client with credentials from config.
     
     Args:
-        config: AWS configuration dictionary
+        config: AWS configuration dictionary (can be nested with 's3' key or flat)
         
     Returns:
         boto3 S3 client
     """
     try:
+        # Support nested config structure: config['s3'] or flat structure
+        s3_config = config.get('s3', config)
+        
         session = boto3.Session(
-            aws_access_key_id=config.get('aws_access_key_id'),
-            aws_secret_access_key=config.get('aws_secret_access_key'),
+            aws_access_key_id=s3_config.get('aws_access_key_id'),
+            aws_secret_access_key=s3_config.get('aws_secret_access_key'),
             region_name='ap-south-1'
         )
         s3 = session.client('s3')
@@ -107,7 +120,7 @@ def call_bedrock_for_metadata(bedrock_client, markdown_content: str, model_id: s
         prompt = """Extract the following information from this blog post and return ONLY a JSON object with these exact keys:
 {
   "title": "Title of the blog",
-  "excerpt": "First 300 characters of the content (no HTML/markdown)",
+  "excerpt": "A concise summary of the article in 300 characters. It should be SEO and AEO and Agent friendly.",
   "slug": "url-friendly-slug",
   "time_to_read": "X min read",
   "tags": "tag1, tag2, tag3"
@@ -115,7 +128,7 @@ def call_bedrock_for_metadata(bedrock_client, markdown_content: str, model_id: s
 
 Rules:
 - Title: Extract or infer the main title
-- Excerpt: First 300 characters of the actual content, plain text
+- Excerpt: A concise summary of the article in 300 characters. It should be SEO and AEO and Agent friendly.
 - Slug: Create a URL-friendly version of the title (lowercase, hyphens instead of spaces, no special chars)
 - Time to read: Estimate reading time (assume 200 words per minute)
 - Tags: Extract 3-5 relevant tags, comma-separated
@@ -360,13 +373,103 @@ def call_bedrock_for_linkedin_post(bedrock_client, markdown_content: str, metada
     try:
         bedrock = bedrock_client
         
-        prompt = """Can you draft a good LinkedIn post? I prefer a storytelling approach. I use short statements and base the post on key learnings and advice for fellow engineers. The first few lines should grab the audience's attention. I write in short statements and avoid overusing emojis. I also write in storylines—storytelling style. Start with that, but don't lose focus on the key takeaways and learnings. The first two lines should be catchy. I write key takeaways in depth: one bullet point followed by details explaining what I mean for fellow engineers. Use moderate emojis and include both detailed explanations and summaries. Use emojis for bullet points.
+        prompt = """Please produce one LinkedIn post only based on the blog content provided below. Follow these constraints exactly:
 
-Write a casual, conversational post suitable for Reddit or similar communities. The tone should be friendly, approachable, and authentic—like how a real person talks in an informal setting. Use short, clear sentences and avoid overly formal or polished language. Avoid using em dashes; replace them with commas, periods, or simple conjunctions for better flow. Vary sentence structure and include natural breaks or slight imperfections that make the text feel spontaneous. Avoid repetitive patterns or phrasing that sounds AI-generated. The goal is to engage readers by sounding genuine and easy to understand.
+Tone & structure
+• Storytelling first, professional and practical overall. Start with a short anecdote or scene from the blog content, written like a real person telling a story.
+• The first two lines must be catchy and hook the reader. Keep them short and punchy.
+• Use short, clear sentences. Vary sentence structure. Include natural breaks and a few small imperfections so it sounds human and spontaneous. Do not sound over-polished or robotic.
+• Write in a friendly, conversational voice — approachable and authentic, as if posting to LinkedIn or Reddit-style tech communities.
+• Avoid em dashes. Use commas, periods, or conjunctions instead.
+• No headers, no code blocks, no inline links. Do not include markdown headers.
+• Use bold and italic markers for emphasis where helpful.
+• Use • bullets and emojis for lists and takeaways (moderate emoji use). Do not overuse emojis.
+• One key requirement: include key takeaways presented as emoji bullets. For each takeaway, show a single bullet point title followed by one paragraph of deeper explanation that a fellow engineer can act on. Also include a one-line summary sentence after the detailed explanation for quick scanning.
+• Keep the post readable in one LinkedIn post — target ~8–14 short lines including bullets, but prioritize clarity over an exact line count.
 
-IMPORTANT: Use **bold** and *italic* markers in the text for emphasis. Do not include markdown headers, code blocks, or inline links. Use • bullets and emojis for lists/emphasis. Produce a single LinkedIn post only.
+Style specifics
+• Storyline opener, then quick context, then a short list of actionable takeaways, then a closing CTA.
+• Use short statements and avoid repetitive phrasing.
+• Use moderate emojis, e.g., one emoji per bullet and 1–2 elsewhere max.
+• Emphasize learning and practical advice for engineers.
+• End with an inviting call to action: encourage readers to connect with or subscribe to Roundz.ai, or read the full blog at the provided placeholder URL. Provide the CTA naturally as a sentence. Use a clear, friendly close: invite comments, reactions, or questions.
 
-Create a LinkedIn post based on this blog content. The post should be engaging, authentic, and encourage interaction."""
+Formatting rules (must follow)
+• Use bold and italic for emphasis.
+• Use • bullets and emojis for the takeaways. Example format for each takeaway:
+• ✅ Takeaway title — One paragraph explaining what it means, how to apply it, and why it matters for engineers. Then a single summary sentence.
+• No raw markdown headers, no code fences, no inline clickable links. If a URL is required, place it plainly as text or use a placeholder like [BLOG_URL].
+• Produce a single LinkedIn post only. Do not produce multiple versions.
+
+<sample_linkedin_post_example>
+
+"System design preparation:
+You've watched 50 hours of system design videos.
+You've memorized every diagram from Grokking.
+You've bookmarked 30 articles on microservices
+
+Results:
+Still no offer, and you're losing confidence in yourself.
+
+System design interviews aren't harder because companies have raised the bar.
+You're just preparing like it's still 2019.
+
+5-6 years ago, you could sketch a load balancer, add a database, call it "microservices" and pass.
+Now interviewers expect you to explain workflow engines, geospatial indexing, and real-time data pipelines.
+
+The problem isn't that there's more to learn.
+It's that most people are learning it wrong.
+
+Stop memorizing theory
+Start solving real problems.
+
+Here's how I learned system design at Google, and how I would practice it now:
+
+Pick a system.
+Design it from scratch.
+Like you're building it tomorrow.
+
+Try these 10 problems:
+
+URL Shortener: unique IDs, collision handling, billion-scale reads
+
+Dropbox: file sync, versioning, conflict resolution
+
+News Feed: ranking, real-time delivery, personalization at scale
+
+WhatsApp: offline messages, delivery receipts, chat history
+
+Uber: live location tracking, driver matching, payment flows
+
+Instagram Stories: auto-deletion, concurrent views, temporary storage
+
+YouTube: video upload, streaming, recommendations, traffic spikes
+
+Calendly: time zones, double-booking prevention, reminders
+
+E-commerce Checkout: cart sync, inventory management, flash sales
+
+Google Docs: live collaboration, conflict-free editing, version control
+
+After 5-6 problems, you'll notice patterns: caching, queues, rate limiting, and partitioning.
+
+That's when concepts click.
+
+This is exactly why we built Layrs (layrs.me). Interactive canvas, real problems, instant feedback on your designs.
+
+Join our discord: [DISCORD_LINK]
+
+No one expects perfection.
+
+They want to see you think through real constraints and explain your choices clearly."
+
+Closing CTA requirement (include one of these options in the post):
+• Option A: Invite readers to connect with or subscribe to Roundz.ai for more practice and interactive system design content. Phrase it naturally, not salesy.
+• Option B: Invite readers to read the full blog at [BLOG_URL] or visit Roundz.ai to explore practice problems and interactive canvases. Use [BLOG_URL] as a placeholder if needed.
+
+Deliverable: Return a single LinkedIn post that follows every instruction above, uses the blog content, and ends with the required CTA.**
+</sample_linkedin_post_example>
+"""
         
         message = {
             "role": "user",
@@ -400,12 +503,79 @@ Create a LinkedIn post based on this blog content. The post should be engaging, 
         return ""
 
 
+def call_bedrock_for_carousel(bedrock_client, markdown_content: str, metadata: Dict[str, Any], model_id: str) -> str:
+    """
+    Call Bedrock API to generate LinkedIn carousel content (5-8 slides).
+    
+    Args:
+        bedrock_client: boto3 bedrock client
+        markdown_content: Blog content
+        metadata: Blog metadata
+        model_id: Bedrock model ID
+        
+    Returns:
+        Carousel content
+    """
+    try:
+        bedrock = bedrock_client
+        
+        prompt = """Create a LinkedIn carousel post with 5-8 slides based on this blog content. Each slide should be concise and focused on a single key point.
+
+Guidelines for each slide:
+- Keep the title/topic short and punchy (one line)
+- Use 2-4 bullet points or a short paragraph for the content
+- Add suggestion if slide can be have any image which is present in blog for that section. Add name of the diagram image based on blog.
+- Focus on actionable insights, key learnings, or important takeaways
+- Use **bold** for emphasis where needed
+- Keep each slide's content under 150-200 words
+
+Structure the carousel as follows:
+1. Title slide or attention-grabbing opener
+2-7. Key points/concepts from the blog, have this detailed and in depth.
+8. Call-to-action or summary slide
+
+Format each slide clearly with a "Slide X:" heading followed by the content. The content should be engaging, professional, and suitable for a LinkedIn carousel.
+
+IMPORTANT: Use **bold** and *italic* markers for emphasis. Use • bullets for lists. Do not include markdown headers, code blocks, or inline links. Produce a carousel with 5-8 slides total."""
+        
+        message = {
+            "role": "user",
+            "content": [
+                {"text": f"Blog Title: {metadata.get('title', '')}"},
+                {"text": f"Blog Content:\n{markdown_content}"},
+                {"text": prompt}
+            ]
+        }
+        
+        print("Calling Bedrock for carousel generation...")
+        
+        response = bedrock.converse(
+            modelId=model_id,
+            messages=[message],
+            inferenceConfig={
+                "maxTokens": 2000,
+                "temperature": 0.7
+            }
+        )
+        
+        carousel_content = response['output']['message']['content'][0]['text']
+        
+        # Convert markdown formatting to LinkedIn-compatible format using configured style
+        carousel_content = format_linkedin_content(carousel_content)
+        
+        return carousel_content
+        
+    except Exception as e:
+        print(f"Error calling Bedrock API for carousel: {e}")
+        return ""
+
+
 def main():
     """
     Main function to process blog preparation.
     """
     # Configuration
-    model_id = "arn:aws:bedrock:ap-south-1:714532077139:inference-profile/apac.anthropic.claude-sonnet-4-20250514-v1:0"
+    model_id = "arn:aws:bedrock:ap-south-1:339713139204:inference-profile/apac.anthropic.claude-sonnet-4-20250514-v1:0"
     bucket_name = "roundz-static-asset-prod"  # Update with your actual bucket name
     s3_folder_path = "static-asset/blog_images"  # Update with your S3 folder path
     cdn_base_url = "https://d5osvdbc8um23.cloudfront.net/static-asset/blog_images/"
@@ -429,6 +599,7 @@ def main():
     
     # Create AWS clients
     print("Creating AWS clients...")
+    # Use separate credentials for Bedrock and S3
     bedrock_client = create_bedrock_client(aws_config)
     s3_client = create_s3_client(aws_config)
     
@@ -504,6 +675,26 @@ def main():
         with open(linkedin_post_file, 'w', encoding='utf-8') as f:
             f.write(linkedin_post)
         print(f"LinkedIn post saved to {linkedin_post_file}")
+    
+    # Step 5: Generate carousel content
+    print("\n=== Step 5: Generating Carousel Content ===")
+    carousel_content = call_bedrock_for_carousel(bedrock_client, updated_markdown, metadata, model_id)
+    
+    if carousel_content:
+        carousel_file = slug_output_dir / "carousel.txt"
+        with open(carousel_file, 'w', encoding='utf-8') as f:
+            f.write(carousel_content)
+        print(f"Carousel content saved to {carousel_file}")
+    
+    # Step 6: Generate Twitter thread
+    print("\n=== Step 6: Generating Twitter Thread ===")
+    twitter_thread = call_bedrock_for_twitter_thread(bedrock_client, updated_markdown, metadata, model_id)
+    
+    if twitter_thread:
+        twitter_file = slug_output_dir / "twitter_thread.txt"
+        with open(twitter_file, 'w', encoding='utf-8') as f:
+            f.write(twitter_thread)
+        print(f"Twitter thread saved to {twitter_file}")
     
     print("\n=== Blog Preparation Complete ===")
     print(f"Output files saved in: {slug_output_dir}")
