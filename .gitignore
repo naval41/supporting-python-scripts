@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large binary files and archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Large image files (if not needed in repo)
+# Uncomment if you want to exclude all images
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+
+# Output directories (if they contain generated files)
+# blog_preparation/output/
+# image_creation/outputs/
+# image_creation/gray_outputs/
+# image_creation/outputs_bgp/
+
+# Logs
+*.log
+
