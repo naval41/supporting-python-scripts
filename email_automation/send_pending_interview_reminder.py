@@ -29,8 +29,8 @@ def main():
     # Distinct emails to avoid spamming multiple emails for multiple pending interviews
     query = """
     SELECT DISTINCT u.email 
-    FROM public."User" u
-    JOIN public."CandidateInterview" ci ON u.id = ci."userId"
+    FROM "User" u
+    JOIN "CandidateInterview" ci ON u.id = ci."userId"
     WHERE ci.status = 'PENDING'
     """
     
