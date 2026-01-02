@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weekly Digest - Roundz.ai</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #ffffff; background-color: #020618; margin: 0; padding: 0;">
+    <div style="background-color: #020618; padding: 40px 20px; min-height: 100vh;">
+        <div style="max-width: 650px; margin: 0 auto; background-color: #0a1628; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 167, 244, 0.4);">
+            
+            <!-- Header -->
+            <div style="background: #020618; text-align: center; border-radius: 10px 10px 0 0; border: 1px solid rgba(0, 167, 244, 0.4); border-bottom: 0px; padding: 30px 30px 20px;">
+                <div style="margin-bottom: 20px;">
+                    <img src="https://d5osvdbc8um23.cloudfront.net/static-asset/images/logo.png" alt="Roundz.ai Logo" style="max-width: 180px; height: auto;">
+                </div>
+                <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #ffffff; padding-bottom: 10px;">Your Weekly Digest</h1>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 16px; font-weight: 400; margin: 0;">Top stories, insights, and experiences from the Roundz.ai community</p>
+                <div style="display: inline-block; background: linear-gradient(135deg, rgba(0, 166, 244, 0.2) 0%, rgba(0, 166, 244, 0.1) 100%); border: 1px solid #00A6F4; color: #00A6F4; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; margin-top: 15px;">{{weekRange}}</div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding: 40px 30px; background-color: #020618; border: 1px solid rgba(0, 167, 244, 0.4); border-bottom: 0px;">
+                <div style="color: rgba(255, 255, 255, 0.85); font-size: 15px; line-height: 1.8; margin-bottom: 35px; text-align: center;">
+                    <p style="margin: 0 0 10px 0;">Hi {{userName}},</p>
+                    <p style="margin: 0;">Here's what you missed this week in the Roundz.ai community. From trending discussions to real interview experiences, we've curated the best content to help you in your career journey.</p>
+                </div>
+
+                <!-- Top Community Stories -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px; margin-top: 40px;">
+                    <div style="width: 36px; height: 36px; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 20px;">🔥</div>
+                    <h2 style="color: #00A6F4; font-size: 20px; font-weight: 600; margin: 0;">Top Community Stories</h2>
+                </div>
+
+                {{#each topStories}}
+                <div style="background: transparent; border: none; border-radius: 0; padding: 20px 0; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 20px;">
+                    {{#if imageUrl}}
+                    <div style="width: 200px; height: 130px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, rgba(0, 166, 244, 0.08) 0%, rgba(0, 166, 244, 0.03) 100%);">
+                        <img src="{{imageUrl}}" alt="{{title}}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    {{/if}}
+                    <div style="display: flex; align-items: flex-start; margin-bottom: 12px; flex: 1;">
+                        <div style="background: transparent; color: rgba(0, 166, 244, 0.6); width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; margin-right: 12px; flex-shrink: 0;">{{add @index 1}}</div>
+                        <div style="flex: 1;">
+                            <div style="color: #ffffff; font-size: 16px; font-weight: 600; margin-bottom: 8px; line-height: 1.4;">
+                                <a href="{{url}}" style="color: #ffffff; text-decoration: none;">{{title}}</a>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap;">
+                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">{{author}}</span>
+                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">{{groupName}}</span>
+                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">{{engagementCount}} engagements</span>
+                            </div>
+                            <div style="color: rgba(255, 255, 255, 0.75); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">{{excerpt}}</div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+                <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(0, 167, 244, 0.48), transparent); margin: 35px 0;"></div>
+
+                <!-- Latest Blogs -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px; margin-top: 40px;">
+                    <div style="width: 36px; height: 36px; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 20px;">📝</div>
+                    <h2 style="color: #00A6F4; font-size: 20px; font-weight: 600; margin: 0;">Latest from Our Blog</h2>
+                </div>
+
+                {{#each blogs}}
+                <div style="background: transparent; border: none; border-radius: 0; overflow: hidden; margin-bottom: 30px;">
+                    {{#if imageUrl}}
+                    <div style="width: 100%; height: 220px; background: linear-gradient(135deg, rgba(0, 166, 244, 0.08) 0%, rgba(0, 166, 244, 0.03) 100%); display: flex; align-items: center; justify-content: center; font-size: 48px; border-radius: 8px; margin-bottom: 15px;">
+                        <img src="{{imageUrl}}" alt="{{title}}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                    </div>
+                    {{/if}}
+                    <div style="padding: 0;">
+                        <span style="display: inline-block; background: rgba(0, 166, 244, 0.15); color: #00A6F4; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">{{category}}</span>
+                        <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 10px; line-height: 1.4;">
+                            <a href="{{url}}" style="color: #ffffff; text-decoration: none;">{{title}}</a>
+                        </div>
+                        <div style="color: rgba(255, 255, 255, 0.75); font-size: 14px; line-height: 1.6; margin-bottom: 15px;">{{excerpt}}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 15px; margin-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                            <div>
+                                <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;">By {{author}}</div>
+                                <div style="color: rgba(255, 255, 255, 0.5); font-size: 12px;">{{publishedDate}}</div>
+                            </div>
+                            <a href="{{url}}" style="color: #00A6F4; font-size: 13px; font-weight: 600; text-decoration: none;">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+                <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(0, 167, 244, 0.48), transparent); margin: 35px 0;"></div>
+
+                <!-- Real Interview Experiences -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px; margin-top: 40px;">
+                    <div style="width: 36px; height: 36px; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 20px;">💼</div>
+                    <h2 style="color: #00A6F4; font-size: 20px; font-weight: 600; margin: 0;">Real Interview Experiences</h2>
+                </div>
+
+                {{#each interviews}}
+                <div style="background: transparent; border: none; border-radius: 0; padding: 20px 0; margin-bottom: 25px; border-bottom: 1px solid rgba(34, 197, 94, 0.15);">
+                    <table style="width: 100%; margin-bottom: 15px;">
+                        <tr>
+                            <td style="width: 70%; vertical-align: middle;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 48px; height: 48px; background: rgba(255, 255, 255, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #22c55e; font-size: 18px; flex-shrink: 0;">
+                                        {{#if companyLogo}}
+                                        <img src="{{companyLogo}}" alt="{{companyName}}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                                        {{else}}
+                                        {{companyInitial}}
+                                        {{/if}}
+                                    </div>
+                                    <div>
+                                        <h3 style="color: #ffffff; font-size: 17px; font-weight: 600; margin-bottom: 4px; margin-top: 0;">{{companyName}}</h3>
+                                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin: 0;">{{position}}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 30%; vertical-align: middle; text-align: right;">
+                                <div style="background: rgba(34, 197, 94, 0.2); color: #22c55e; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block;">{{status}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin: 15px 0;">
+                        <tr>
+                            <td style="width: 50%; padding: 10px; vertical-align: top;">
+                                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px; height: 100%; box-sizing: border-box;">
+                                    <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Experience</div>
+                                    <div style="color: #ffffff; font-size: 14px; font-weight: 600;">{{experience}}</div>
+                                </div>
+                            </td>
+                            <td style="width: 50%; padding: 10px; vertical-align: top;">
+                                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px; height: 100%; box-sizing: border-box;">
+                                    <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Location</div>
+                                    <div style="color: #ffffff; font-size: 14px; font-weight: 600;">{{location}}</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; padding: 10px; vertical-align: top;">
+                                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px; height: 100%; box-sizing: border-box;">
+                                    <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Rounds</div>
+                                    <div style="color: #ffffff; font-size: 14px; font-weight: 600;">{{rounds}}</div>
+                                </div>
+                            </td>
+                            <td style="width: 50%; padding: 10px; vertical-align: top;">
+                                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px; height: 100%; box-sizing: border-box;">
+                                    <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Difficulty</div>
+                                    <div style="color: #ffffff; font-size: 14px; font-weight: 600;">{{difficulty}}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div style="color: rgba(255, 255, 255, 0.75); font-size: 14px; line-height: 1.6; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.06);">{{excerpt}}</div>
+                    
+                    <a href="{{url}}" style="color: #00A6F4; font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 12px; display: inline-block;">Read Full Experience →</a>
+                </div>
+                {{/each}}
+
+                <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(0, 167, 244, 0.48), transparent); margin: 35px 0;"></div>
+
+                <!-- CTA Section -->
+                <div style="background: linear-gradient(135deg, rgba(0, 166, 244, 0.1) 0%, rgba(0, 166, 244, 0.05) 100%); border: 1px solid #00A6F4; border-radius: 10px; padding: 30px; text-align: center; margin: 35px 0;">
+                    <h3 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 10px; margin-top: 0;">Ready to Ace Your Next Interview?</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 20px; margin-top: 0;">Practice with AI-powered mock interviews tailored to your target role</p>
+                    <a href="https://roundz.ai/book-interview" style="display: inline-block; padding: 14px 32px; background: #00A6F4; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Book Your Mock Interview</a>
+                </div>
+
+                <!-- Closing -->
+                <div style="color: rgba(255, 255, 255, 0.8); font-size: 14px; line-height: 1.8; text-align: center;">
+                    <p style="margin: 0 0 20px 0;">
+                        That's all for this week! Stay tuned for more insights, stories, and opportunities from the Roundz.ai community.
+                    </p>
+                    
+                    <div style="color: #00A6F4; font-weight: 600; margin-top: 20px;">
+                        Keep learning, keep growing!<br>
+                        The Roundz.ai Team
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color: #020618; padding: 30px; text-align: center; border: 1px solid rgba(0, 167, 244, 0.4); border-radius: 0 0 10px 10px;">
+                <div style="margin-bottom: 20px;">
+                    <a href="https://roundz.ai" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Home</a>
+                    <a href="https://roundz.ai/community" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Community</a>
+                    <a href="https://roundz.ai/blog" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Blog</a>
+                    <a href="https://roundz.ai/interviews" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Interviews</a>
+                    <a href="https://roundz.ai/contact-us" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Contact Us</a>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <a href="https://www.linkedin.com/company/roundz-ai" style="display: inline-block; margin: 0 10px; color: rgba(255, 255, 255, 0.6); text-decoration: none;">LinkedIn</a>
+                    <a href="https://x.com/roundz_ai" style="display: inline-block; margin: 0 10px; color: rgba(255, 255, 255, 0.6); text-decoration: none;">Twitter</a>
+                    <a href="https://github.com/roundzapp" style="display: inline-block; margin: 0 10px; color: rgba(255, 255, 255, 0.6); text-decoration: none;">GitHub</a>
+                </div>
+                
+                <div style="color: rgba(255, 255, 255, 0.5); font-size: 12px; line-height: 1.6;">
+                    <p style="margin: 0 0 10px 0;">&copy; {{currentYear}} Roundz.ai. All rights reserved.</p>
+                    <p style="margin: 0;">
+                        AI-Powered Interview Analysis Platform
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

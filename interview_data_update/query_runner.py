@@ -6,61 +6,39 @@ Just run the script and enter your query when prompted
 """
 
 import sys
+from pathlib import Path
+
+# Add parent directory to sys.path
+sys.path.append(str(Path(__file__).parent.parent))
+
 import psycopg2
-from psycopg2.extras import RealDictCursor
-from db_config import DB_CONFIG
 from typing import List, Dict, Any
+from util.db_helper import DBHelper
 
 
 class DatabaseQueryRunner:
     def __init__(self):
-        """Initialize database connection"""
-        self.connection = None
-        self.cursor = None
+        """Initialize database connection via helper"""
+        self.db_helper = DBHelper()
         self.connect()
     
     def connect(self):
         """Establish database connection"""
         try:
-            self.connection = psycopg2.connect(
-                host=DB_CONFIG['host'],
-                port=DB_CONFIG['port'],
-                database=DB_CONFIG['database'],
-                user=DB_CONFIG['user'],
-                password=DB_CONFIG['password']
-            )
-            self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
-            
-            # Set schema if specified
-            if DB_CONFIG.get('schema') and DB_CONFIG['schema'] != 'public':
-                self.cursor.execute(f"SET search_path TO {DB_CONFIG['schema']}, public;")
-            
-            print(f"✓ Connected to database: {DB_CONFIG['database']} on {DB_CONFIG['host']}")
-            if DB_CONFIG.get('schema'):
-                print(f"✓ Using schema: {DB_CONFIG['schema']}")
+            self.db_helper.connect()
+            print(f"✓ Connected to database via DBHelper")
             print()
             
-        except psycopg2.Error as e:
+        except Exception as e:
             print(f"✗ Database connection failed: {e}")
             sys.exit(1)
     
     def execute_query(self, query: str) -> List[Dict[str, Any]]:
         """Execute SQL query and return results"""
         try:
-            self.cursor.execute(query)
-            
-            # Check if query returns results (SELECT, etc.)
-            if self.cursor.description:
-                results = self.cursor.fetchall()
-                return [dict(row) for row in results]
-            else:
-                # For INSERT, UPDATE, DELETE, etc.
-                affected_rows = self.cursor.rowcount
-                self.connection.commit()
-                return [{"message": f"Query executed successfully. Rows affected: {affected_rows}"}]
+            return self.db_helper.execute_query(query)
                 
-        except psycopg2.Error as e:
-            self.connection.rollback()
+        except Exception as e:
             raise Exception(f"Query execution failed: {e}")
     
     def print_results(self, results: List[Dict[str, Any]]):
@@ -69,10 +47,11 @@ class DatabaseQueryRunner:
             print("No results returned.")
             return
         
-        # Handle non-SELECT queries
-        if len(results) == 1 and "message" in results[0]:
-            print(results[0]["message"])
-            return
+        # Handle non-SELECT queries (helper returns list with dict containing affected_rows)
+        if len(results) == 1 and ("message" in results[0] or "affected_rows" in results[0]):
+             msg = results[0].get("message") or f"Query executed successfully. Rows affected: {results[0].get('affected_rows')}"
+             print(msg)
+             return
         
         # Get column names
         columns = list(results[0].keys())
@@ -170,10 +149,8 @@ class DatabaseQueryRunner:
     
     def close(self):
         """Close database connection"""
-        if self.cursor:
-            self.cursor.close()
-        if self.connection:
-            self.connection.close()
+        if self.db_helper:
+            self.db_helper.close()
 
 
 def main():

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weekly Digest - Roundz.ai</title>
+    <style>
+        /* Email-safe CSS for content sections */
+        .story-card {
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 20px 0 !important;
+            margin-bottom: 15px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            display: flex !important;
+            gap: 20px !important;
+        }
+        
+        .story-image {
+            width: 200px !important;
+            height: 130px !important;
+            flex-shrink: 0 !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.08) 0%, rgba(0, 166, 244, 0.03) 100%) !important;
+        }
+        
+        .story-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        
+        .story-header {
+            display: flex !important;
+            align-items: flex-start !important;
+            margin-bottom: 12px !important;
+            flex: 1 !important;
+        }
+        
+        .story-number {
+            background: transparent !important;
+            color: rgba(0, 166, 244, 0.6) !important;
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 600 !important;
+            font-size: 16px !important;
+            margin-right: 12px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .story-content {
+            flex: 1 !important;
+        }
+        
+        .story-title {
+            color: #ffffff !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            margin-bottom: 8px !important;
+            line-height: 1.4 !important;
+        }
+        
+        .story-title a {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        
+        .story-meta {
+            display: flex !important;
+            align-items: center !important;
+            gap: 15px !important;
+            margin-bottom: 10px !important;
+            flex-wrap: wrap !important;
+        }
+        
+        .meta-item {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 12px !important;
+        }
+        
+        .story-excerpt {
+            color: rgba(255, 255, 255, 0.75) !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            margin-bottom: 12px !important;
+        }
+        
+        .blog-card {
+            background: transparent !important;
+            border: none !important;
+            margin-bottom: 30px !important;
+        }
+        
+        .blog-image {
+            width: 100% !important;
+            height: 220px !important;
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.08) 0%, rgba(0, 166, 244, 0.03) 100%) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 8px !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .blog-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 8px !important;
+        }
+        
+        .blog-category {
+            display: inline-block !important;
+            background: rgba(0, 166, 244, 0.15) !important;
+            color: #00A6F4 !important;
+            padding: 4px 12px !important;
+            border-radius: 4px !important;
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            margin-bottom: 12px !important;
+        }
+        
+        .blog-title {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            margin-bottom: 10px !important;
+            line-height: 1.4 !important;
+        }
+        
+        .blog-title a {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        
+        .blog-excerpt {
+            color: rgba(255, 255, 255, 0.75) !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .blog-footer {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding-top: 15px !important;
+            margin-top: 15px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        
+        .blog-author {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 13px !important;
+        }
+        
+        .blog-date {
+            color: rgba(255, 255, 255, 0.5) !important;
+            font-size: 12px !important;
+        }
+        
+        .read-more {
+            color: #00A6F4 !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            text-decoration: none !important;
+        }
+        
+        .interview-card {
+            background: transparent !important;
+            border: none !important;
+            padding: 20px 0 !important;
+            margin-bottom: 25px !important;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.15) !important;
+        }
+        
+        .interview-header {
+            display: table !important;
+            width: 100% !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .interview-company {
+            display: table-cell !important;
+            vertical-align: middle !important;
+            width: 70% !important;
+        }
+        
+        .company-content {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+        
+        .company-logo {
+            width: 48px !important;
+            height: 48px !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 600 !important;
+            color: #22c55e !important;
+            font-size: 18px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .company-logo img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            border-radius: 8px !important;
+        }
+        
+        .company-info h3 {
+            color: #ffffff !important;
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            margin-bottom: 4px !important;
+            margin-top: 0 !important;
+        }
+        
+        .company-info p {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 13px !important;
+            margin: 0 !important;
+        }
+        
+        .interview-offer {
+            display: table-cell !important;
+            vertical-align: middle !important;
+            width: 30% !important;
+            text-align: right !important;
+        }
+        
+        .interview-badge {
+            background: rgba(34, 197, 94, 0.2) !important;
+            color: #22c55e !important;
+            padding: 6px 12px !important;
+            border-radius: 6px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            display: inline-block !important;
+        }
+        
+        .interview-details table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+        }
+        
+        .interview-details td {
+            width: 50% !important;
+            padding: 10px !important;
+            vertical-align: top !important;
+        }
+        
+        .detail-box {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            border-radius: 6px !important;
+            padding: 10px !important;
+            height: 100% !important;
+            box-sizing: border-box !important;
+        }
+        
+        .detail-box-label {
+            color: rgba(255, 255, 255, 0.5) !important;
+            font-size: 11px !important;
+            margin-bottom: 4px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .detail-box-value {
+            color: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        
+        .interview-excerpt {
+            color: rgba(255, 255, 255, 0.75) !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            margin-top: 15px !important;
+            padding-top: 15px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+    </style>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #ffffff; background-color: #020618; margin: 0; padding: 0;">
+    <div style="background-color: #020618; padding: 40px 20px; min-height: 100vh;">
+        <div style="max-width: 650px; margin: 0 auto; background-color: #0a1628; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 167, 244, 0.4);">
+            
+            <!-- Header -->
+            <div style="background: #020618; text-align: center; border-radius: 10px 10px 0 0; border: 1px solid rgba(0, 167, 244, 0.4); border-bottom: 0px; padding: 30px 30px 20px;">
+                <div style="margin-bottom: 20px;">
+                    <img src="https://d5osvdbc8um23.cloudfront.net/static-asset/images/logo.png" alt="Roundz.ai Logo" style="max-width: 180px; height: auto;">
+                </div>
+                <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #ffffff; padding-bottom: 10px;">Your Weekly Digest</h1>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 16px; font-weight: 400; margin: 0;">Top stories, insights, and experiences from the Roundz.ai community</p>
+                <div style="display: inline-block; background: linear-gradient(135deg, rgba(0, 166, 244, 0.2) 0%, rgba(0, 166, 244, 0.1) 100%); border: 1px solid #00A6F4; color: #00A6F4; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; margin-top: 15px;">{{weekRange}}</div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding: 40px 30px; background-color: #020618; border: 1px solid rgba(0, 167, 244, 0.4); border-bottom: 0px;">
+                <div style="color: rgba(255, 255, 255, 0.85); font-size: 15px; line-height: 1.8; margin-bottom: 35px; text-align: center;">
+                    <p style="margin: 0 0 10px 0;">Hi {{userName}},</p>
+                    <p style="margin: 0;">Here's what you missed this week in the Roundz.ai community. From trending discussions to real interview experiences, we've curated the best content to help you in your career journey.</p>
+                </div>
+
+                <!-- Top Community Stories -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px; margin-top: 40px;">
+                    <div style="width: 36px; height: 36px; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 20px;">🔥</div>
+                    <h2 style="color: #00A6F4; font-size: 20px; font-weight: 600; margin: 0;">Top Community Stories</h2>
+                </div>
+
+                {{#each topStories}}
+                <div class="story-card">
+                    {{#if imageUrl}}
+                    <div class="story-image">
+                        <img src="{{imageUrl}}" alt="{{title}}">
+                    </div>
+                    {{/if}}
+                    <div class="story-header">
+                        <div class="story-number">{{add @index 1}}</div>
+                        <div class="story-content">
+                            <div class="story-title">
+                                <a href="{{url}}">{{title}}</a>
+                            </div>
+                            <div class="story-meta">
+                                <span class="meta-item">{{author}}</span>
+                                <span class="meta-item">{{groupName}}</span>
+                                <span class="meta-item">{{engagementCount}} engagements</span>
+                            </div>
+                            <div class="story-excerpt">{{excerpt}}</div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+                <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(0, 167, 244, 0.48), transparent); margin: 35px 0;"></div>
+
+                <!-- Latest Blogs -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px; margin-top: 40px;">
+                    <div style="width: 36px; height: 36px; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 20px;">📝</div>
+                    <h2 style="color: #00A6F4; font-size: 20px; font-weight: 600; margin: 0;">Latest from Our Blog</h2>
+                </div>
+
+                {{#each blogs}}
+                <div class="blog-card">
+                    {{#if imageUrl}}
+                    <div class="blog-image">
+                        <img src="{{imageUrl}}" alt="{{title}}">
+                    </div>
+                    {{/if}}
+                    <div class="blog-content">
+                        <span class="blog-category">{{category}}</span>
+                        <div class="blog-title">
+                            <a href="{{url}}">{{title}}</a>
+                        </div>
+                        <div class="blog-excerpt">{{excerpt}}</div>
+                        <div class="blog-footer">
+                            <div>
+                                <div class="blog-author">By {{author}}</div>
+                                <div class="blog-date">{{publishedDate}}</div>
+                            </div>
+                            <a href="{{url}}" class="read-more">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+                <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(0, 167, 244, 0.48), transparent); margin: 35px 0;"></div>
+
+                <!-- Real Interview Experiences -->
+                <div style="display: flex; align-items: center; margin-bottom: 25px; margin-top: 40px;">
+                    <div style="width: 36px; height: 36px; background: transparent; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 20px;">💼</div>
+                    <h2 style="color: #00A6F4; font-size: 20px; font-weight: 600; margin: 0;">Real Interview Experiences</h2>
+                </div>
+
+                {{#each interviews}}
+                <div class="interview-card">
+                    <div class="interview-header">
+                        <div class="interview-company">
+                            <div class="company-content">
+                                <div class="company-logo">
+                                    {{#if companyLogo}}
+                                    <img src="{{companyLogo}}" alt="{{companyName}}">
+                                    {{else}}
+                                    {{companyInitial}}
+                                    {{/if}}
+                                </div>
+                                <div class="company-info">
+                                    <h3>{{companyName}}</h3>
+                                    <p>{{position}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interview-offer">
+                            <div class="interview-badge">{{status}}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interview-details">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Experience</div>
+                                        <div class="detail-box-value">{{experience}}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Location</div>
+                                        <div class="detail-box-value">{{location}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Rounds</div>
+                                        <div class="detail-box-value">{{rounds}}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Difficulty</div>
+                                        <div class="detail-box-value">{{difficulty}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="interview-excerpt">{{excerpt}}</div>
+                    
+                    <a href="{{url}}" class="read-more" style="margin-top: 12px; display: inline-block;">Read Full Experience →</a>
+                </div>
+                {{/each}}
+
+                <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(0, 167, 244, 0.48), transparent); margin: 35px 0;"></div>
+
+                <!-- CTA Section -->
+                <div style="background: linear-gradient(135deg, rgba(0, 166, 244, 0.1) 0%, rgba(0, 166, 244, 0.05) 100%); border: 1px solid #00A6F4; border-radius: 10px; padding: 30px; text-align: center; margin: 35px 0;">
+                    <h3 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 10px; margin-top: 0;">Ready to Ace Your Next Interview?</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 20px; margin-top: 0;">Practice with AI-powered mock interviews tailored to your target role</p>
+                    <a href="https://roundz.ai/book-interview" style="display: inline-block; padding: 14px 32px; background: #00A6F4; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Book Your Mock Interview</a>
+                </div>
+
+                <!-- Closing -->
+                <div style="color: rgba(255, 255, 255, 0.8); font-size: 14px; line-height: 1.8; text-align: center;">
+                    <p style="margin: 0 0 20px 0;">
+                        That's all for this week! Stay tuned for more insights, stories, and opportunities from the Roundz.ai community.
+                    </p>
+                    
+                    <div style="color: #00A6F4; font-weight: 600; margin-top: 20px;">
+                        Keep learning, keep growing!<br>
+                        The Roundz.ai Team
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color: #020618; padding: 30px; text-align: center; border: 1px solid rgba(0, 167, 244, 0.4); border-radius: 0 0 10px 10px;">
+                <div style="margin-bottom: 20px;">
+                    <a href="https://roundz.ai" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Home</a>
+                    <a href="https://roundz.ai/community" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Community</a>
+                    <a href="https://roundz.ai/blog" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Blog</a>
+                    <a href="https://roundz.ai/interviews" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Interviews</a>
+                    <a href="https://roundz.ai/contact-us" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; margin: 0 15px; font-size: 12px;">Contact Us</a>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <a href="https://www.linkedin.com/company/roundz-ai" style="display: inline-block; margin: 0 10px; color: rgba(255, 255, 255, 0.6); text-decoration: none;">LinkedIn</a>
+                    <a href="https://x.com/roundz_ai" style="display: inline-block; margin: 0 10px; color: rgba(255, 255, 255, 0.6); text-decoration: none;">Twitter</a>
+                    <a href="https://github.com/roundzapp" style="display: inline-block; margin: 0 10px; color: rgba(255, 255, 255, 0.6); text-decoration: none;">GitHub</a>
+                </div>
+                
+                <div style="color: rgba(255, 255, 255, 0.5); font-size: 12px; line-height: 1.6;">
+                    <p style="margin: 0 0 10px 0;">&copy; {{currentYear}} Roundz.ai. All rights reserved.</p>
+                    <p style="margin: 0;">
+                        AI-Powered Interview Analysis Platform
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+    "aws": {
+      "region_name": "ap-south-1",
+      "bedrock": {
+        "aws_access_key_id": "YOUR_BEDROCK_ACCESS_KEY",
+        "aws_secret_access_key": "YOUR_BEDROCK_SECRET_KEY"
+      },
+      "s3": {
+        "aws_access_key_id": "YOUR_S3_ACCESS_KEY",
+        "aws_secret_access_key": "YOUR_S3_SECRET_KEY"
+      }
+    },
+    "database": {
+      "host": "localhost",
+      "port": 5432,
+      "database": "your_database",
+      "user": "your_user",
+      "password": "your_password",
+      "schema": "public"
+    },
+    "email": {
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "sender_email": "your_email@example.com",
+      "sender_name": "Your Name",
+      "sender_password": "your_app_password"
+    }
+  }
