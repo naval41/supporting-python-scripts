@@ -9,6 +9,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from util.db_helper import DBHelper
 from util.email_helper import EmailHelper
 
+def main():
     import argparse
     parser = argparse.ArgumentParser(description='Send pending interview reminders')
     parser.add_argument('--test-email', help='Send a single test email to this address and exit')
