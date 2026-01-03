@@ -9,7 +9,11 @@ sys.path.append(str(Path(__file__).parent.parent))
 from util.db_helper import DBHelper
 from util.email_helper import EmailHelper
 
-def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='Send pending interview reminders')
+    parser.add_argument('--test-email', help='Send a single test email to this address and exit')
+    args = parser.parse_args()
+
     print("Starting Pending Interview Reminder Script...")
 
     # 1. Initialize Helpers
@@ -42,7 +46,7 @@ def main():
         print(f"✗ Failed to fetch users: {e}")
         return
 
-    if not users:
+    if not users and not args.test_email:
         print("No pending interviews found. Exiting.")
         return
 
@@ -60,6 +64,18 @@ def main():
     action_url = "http://roundz.ai/my-interview"
     subject = "Reminder: Complete Your Interview on Roundz AI"
     
+    if args.test_email:
+        print(f"\n--- TEST MODE ---")
+        print(f"Sending single test email to: {args.test_email}")
+        email_body = template_content.replace("{{action_url}}", action_url)
+        if email_helper.send_email(subject, email_body, args.test_email, is_html=True):
+            print(f"✓ Test email sent successfully to {args.test_email}")
+        else:
+            print(f"✗ Failed to send test email")
+        
+        db_helper.close()
+        return
+
     success_count = 0
     fail_count = 0
 
