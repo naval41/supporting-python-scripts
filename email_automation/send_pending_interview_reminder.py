@@ -32,6 +32,7 @@ def main():
     FROM "User" u
     JOIN "CandidateInterview" ci ON u.id = ci."userId"
     WHERE ci.status = 'PENDING'
+      AND ci."createdAt" < NOW() - INTERVAL '3 days'
     """
     
     try:
