@@ -25,13 +25,13 @@ class DBHelper:
             # Set schema if specified
             schema = self.db_config.get('schema')
             print(f"DEBUG: Checking schema configuration. Schema: '{schema}'")
-            if schema and schema != 'public':
+            if schema:
                 print(f"DEBUG: Setting search_path to '{schema}, public'")
                 with self.connection.cursor() as cursor:
                      cursor.execute(f"SET search_path TO {schema}, public;")
                 print("DEBUG: Schema set successfully")
             else:
-                print("DEBUG: Using default public schema (no custom schema set or it is 'public')")
+                print("DEBUG: No schema specified in config, using default search_path")
             
             return self.connection
         except psycopg2.Error as e:
