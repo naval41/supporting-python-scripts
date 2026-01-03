@@ -28,7 +28,7 @@ class DBHelper:
             if schema:
                 print(f"DEBUG: Setting search_path to '{schema}, public'")
                 with self.connection.cursor() as cursor:
-                     cursor.execute(f"SET search_path TO {schema}, public;")
+                     cursor.execute(f"SET search_path TO {schema}")
                 print("DEBUG: Schema set successfully")
             else:
                 print("DEBUG: No schema specified in config, using default search_path")
