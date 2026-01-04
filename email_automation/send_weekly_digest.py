@@ -103,8 +103,8 @@ def fetch_data(db_helper: DBHelper, start_date: datetime.date, end_date: datetim
         c.name as company_name, c."logoUrl" as company_logo
     FROM "Interview" i
     JOIN "Company" c ON i."companyId" = c.id
-    WHERE i."createdAt" >= '{start_str}' AND i."createdAt" <= '{end_str}'
-    ORDER BY i."createdAt" DESC
+    WHERE i."date" >= '{start_str}' AND i."date" <= '{end_str}'
+    ORDER BY i."date" DESC
     LIMIT 2
     """
     
