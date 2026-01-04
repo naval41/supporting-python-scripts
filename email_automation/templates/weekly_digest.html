@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weekly Digest - Roundz.ai</title>
+    <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #020618;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-wrapper {
+            background-color: #020618;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #0a1628;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px #00a7f464;
+        }
+
+        .header {
+            background: #020618;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            border: 1px solid #00a7f464;
+            border-bottom: 0px;
+            padding: 30px 30px 20px;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            padding-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .week-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.2) 0%, rgba(0, 166, 244, 0.1) 100%);
+            border: 1px solid #00A6F4;
+            color: #00A6F4;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-top: 15px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            background-color: #020618;
+            border: 1px solid #00a7f464;
+            border-bottom: 0px;
+        }
+
+        .intro-text {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            margin-top: 40px;
+        }
+
+        .section-header:first-child {
+            margin-top: 0;
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .section-header h2 {
+            color: #00A6F4;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-count {
+            margin-left: auto;
+            background: rgba(0, 166, 244, 0.1);
+            color: #00A6F4;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #00a7f47a, transparent);
+            margin: 35px 0;
+        }
+
+        /* Story Cards */
+        .story-card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 20px 0;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            gap: 20px;
+        }
+
+        .story-card:last-child {
+            border-bottom: none;
+        }
+
+        .story-card:hover {
+            background: rgba(0, 166, 244, 0.02);
+        }
+
+        .story-image {
+            width: 200px;
+            height: 130px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.08) 0%, rgba(0, 166, 244, 0.03) 100%);
+        }
+
+        .story-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex: 1;
+        }
+
+        .story-number {
+            background: transparent;
+            color: rgba(0, 166, 244, 0.6);
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .story-content {
+            flex: 1;
+        }
+
+        .story-title {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .story-title a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .story-title a:hover {
+            color: #00A6F4;
+        }
+
+        .story-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .meta-item::before {
+            content: "";
+            width: 4px;
+            height: 4px;
+            background: rgba(0, 166, 244, 0.6);
+            border-radius: 50%;
+        }
+
+        .meta-item:first-child::before {
+            display: none;
+        }
+
+        .story-excerpt {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .story-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(0, 166, 244, 0.1);
+            color: #00A6F4;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Blog Cards */
+        .blog-card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            opacity: 0.95;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.08) 0%, rgba(0, 166, 244, 0.03) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .blog-content {
+            padding: 0;
+        }
+
+        .blog-category {
+            display: inline-block;
+            background: rgba(0, 166, 244, 0.15);
+            color: #00A6F4;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .blog-title {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .blog-title a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .blog-title a:hover {
+            color: #00A6F4;
+        }
+
+        .blog-excerpt {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .blog-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .blog-author {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+        }
+
+        .blog-date {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        .read-more {
+            color: #00A6F4;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* Interview Experience Cards */
+        .interview-card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 20px 0;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.15);
+        }
+
+        .interview-card:last-child {
+            border-bottom: none;
+        }
+
+        .interview-card:hover {
+            background: rgba(34, 197, 94, 0.02);
+        }
+
+        .interview-header {
+            display: table;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .interview-company {
+            display: table-cell;
+            vertical-align: middle;
+            width: 70%;
+        }
+
+        .company-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .company-logo {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #22c55e;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .company-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .company-info h3 {
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .company-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .interview-offer {
+            display: table-cell;
+            vertical-align: middle;
+            width: 30%;
+            text-align: right;
+        }
+
+        .interview-badge {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .interview-details {
+            margin: 15px 0;
+        }
+
+        .interview-details table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .interview-details td {
+            width: 50%;
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        .detail-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 10px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .detail-box-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-box-value {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .interview-excerpt {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.1) 0%, rgba(0, 166, 244, 0.05) 100%);
+            border: 1px solid #00A6F4;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin: 35px 0;
+        }
+
+        .cta-section h3 {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #00A6F4;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px #00a7f47a;
+        }
+
+        .cta-button:hover {
+            background: #0095db;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px #00a7f47a;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #020618;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #00a7f464;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #00A6F4;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #00A6F4;
+        }
+
+        .unsubscribe {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .unsubscribe a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+        .unsubscribe a:hover {
+            color: #00A6F4;
+            text-decoration: underline;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .email-wrapper {
+                padding: 20px 10px;
+            }
+
+            .header,
+            .content,
+            .footer {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .story-card,
+            .interview-card {
+                padding: 15px 0;
+                flex-direction: column;
+            }
+
+            .story-image {
+                width: 100%;
+                height: 180px;
+            }
+
+            .interview-header {
+                display: block;
+            }
+
+            .interview-company,
+            .interview-offer {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+
+            .interview-offer {
+                margin-top: 10px;
+            }
+
+            .interview-details {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-image {
+                height: 150px;
+            }
+
+            .section-header h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <img src="https://d5osvdbc8um23.cloudfront.net/static-asset/images/logo.png" alt="Roundz.ai Logo">
+                </div>
+                <h1>Your Weekly Digest</h1>
+                <p>Top stories, insights, and experiences from the Roundz.ai community</p>
+                <div class="week-badge">{{weekRange}}</div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <div class="intro-text">
+                    <p>Hi {{userName}},</p>
+                    <p>Here's what you missed this week in the Roundz.ai community. From trending discussions to real
+                        interview experiences, we've curated the best content to help you in your career journey.</p>
+                </div>
+
+                <!-- Top Community Stories -->
+                <div class="section-header">
+                    <div class="section-icon">🔥</div>
+                    <h2>Top Community Stories</h2>
+                </div>
+
+                {% for story in topStories %}
+                <div class="story-card">
+                    {% if story.imageUrl %}
+                    <div class="story-image">
+                        <img src="{{story.imageUrl}}" alt="{{story.title}}">
+                    </div>
+                    {% endif %}
+                    <div class="story-header">
+                        <div class="story-number">{{ loop.index }}</div>
+                        <div class="story-content">
+                            <div class="story-title">
+                                <a href="{{story.url}}">{{story.title}}</a>
+                            </div>
+                            <div class="story-meta">
+                                <span class="meta-item">{{story.author}}</span>
+                                <span class="meta-item">{{story.groupName}}</span>
+                                <span class="meta-item">{{story.engagementCount}} engagements</span>
+                            </div>
+                            <div class="story-excerpt">{{story.excerpt}}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="divider"></div>
+
+                <!-- Latest Blogs -->
+                <div class="section-header">
+                    <div class="section-icon">📝</div>
+                    <h2>Latest from Our Blog</h2>
+                </div>
+
+                {% for blog in blogs %}
+                <div class="blog-card">
+                    {% if blog.imageUrl %}
+                    <div class="blog-image">
+                        <img src="{{blog.imageUrl}}" alt="{{blog.title}}">
+                    </div>
+                    {% endif %}
+                    <div class="blog-content">
+                        <span class="blog-category">{{blog.category}}</span>
+                        <div class="blog-title">
+                            <a href="{{blog.url}}">{{blog.title}}</a>
+                        </div>
+                        <div class="blog-excerpt">{{blog.excerpt}}</div>
+                        <div class="blog-footer">
+                            <div>
+                                <div class="blog-author">By {{blog.author}}</div>
+                                <div class="blog-date">{{blog.publishedDate}}</div>
+                            </div>
+                            <a href="{{blog.url}}" class="read-more">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="divider"></div>
+
+                <!-- Real Interview Experiences -->
+                <div class="section-header">
+                    <div class="section-icon">💼</div>
+                    <h2>Real Interview Experiences</h2>
+                </div>
+
+                {% for interview in interviews %}
+                <div class="interview-card">
+                    <div class="interview-header">
+                        <div class="interview-company">
+                            <div class="company-content">
+                                <div class="company-logo">
+                                    {% if interview.companyLogo %}
+                                    <img src="{{interview.companyLogo}}" alt="{{interview.companyName}}">
+                                    {% else %}
+                                    {{interview.companyInitial}}
+                                    {% endif %}
+                                </div>
+                                <div class="company-info">
+                                    <h3>{{interview.companyName}}</h3>
+                                    <p>{{interview.position}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interview-offer">
+                            <div class="interview-badge">{{interview.status}}</div>
+                        </div>
+                    </div>
+
+                    <div class="interview-details">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Experience</div>
+                                        <div class="detail-box-value">{{interview.experience}}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Location</div>
+                                        <div class="detail-box-value">{{interview.location}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Rounds</div>
+                                        <div class="detail-box-value">{{interview.rounds}}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="detail-box">
+                                        <div class="detail-box-label">Difficulty</div>
+                                        <div class="detail-box-value">{{interview.difficulty}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="interview-excerpt">{{interview.excerpt}}</div>
+
+                    <a href="{{interview.url}}" class="read-more" style="margin-top: 12px; display: inline-block;">Read
+                        Full
+                        Experience →</a>
+                </div>
+                {% endfor %}
+
+                <div class="divider"></div>
+
+                <!-- CTA Section -->
+                <div class="cta-section">
+                    <h3>Ready to Ace Your Next Interview?</h3>
+                    <p>Practice with AI-powered mock interviews tailored to your target role</p>
+                    <a href="https://roundz.ai/book-interview" class="cta-button">Book Your Mock Interview</a>
+                </div>
+
+                <!-- Closing -->
+                <div style="color: rgba(255, 255, 255, 0.8); font-size: 14px; line-height: 1.8; text-align: center;">
+                    <p>
+                        That's all for this week! Stay tuned for more insights, stories, and opportunities from the
+                        Roundz.ai community.
+                    </p>
+
+                    <div style="color: #00A6F4; font-weight: 600; margin-top: 20px;">
+                        Keep learning, keep growing!<br>
+                        The Roundz.ai Team
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-links">
+                    <a href="https://roundz.ai">Home</a>
+                    <a href="https://roundz.ai/community">Community</a>
+                    <a href="https://roundz.ai/blog">Blog</a>
+                    <a href="https://roundz.ai/interviews">Interviews</a>
+                    <a href="https://roundz.ai/contact-us">Contact Us</a>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/company/roundz-ai">LinkedIn</a>
+                    <a href="https://x.com/roundz_ai">Twitter</a>
+                    <a href="https://github.com/roundzapp">GitHub</a>
+                </div>
+
+                <div class="footer-text">
+                    <p>&copy; {{currentYear}} Roundz AI. All rights reserved.</p>
+                    <p style="margin-top: 10px;">
+                        AI-Powered Interview Analysis Platform
+                    </p>
+                </div>
+
+                <!--
+                <div class="unsubscribe">
+                    <a href="{{unsubscribeUrl}}">Unsubscribe from weekly digest</a> | 
+                    <a href="{{preferencesUrl}}">Manage email preferences</a>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

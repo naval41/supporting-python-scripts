@@ -52,7 +52,7 @@ def main():
         return
 
     # 3. Read Email Template
-    template_path = Path(__file__).parent.parent / "interview_data_update" / "email_templates" / "pending_interview_reminder.html"
+    template_path = Path(__file__).parent.parent / "email_automation" / "templates" / "pending_interview_reminder.html"
     try:
         with open(template_path, 'r', encoding='utf-8') as f:
             template_content = f.read()

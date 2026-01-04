@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Interview - Roundz.ai</title>
+    <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #020618;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-wrapper {
+            background-color: #020618;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #0a1628;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px #00a7f464;
+        }
+
+        .header {
+            background: #020618;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            border: 1px solid #00a7f464;
+            border-bottom: 0px;
+            padding: 30px 30px 20px;
+        }
+
+        .logo img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            background-color: #020618;
+            border: 1px solid #00a7f464;
+            border-bottom: 0px;
+            text-align: center;
+        }
+
+        .intro-text {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 166, 244, 0.1) 0%, rgba(0, 166, 244, 0.05) 100%);
+            border: 1px solid #00A6F4;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin: 35px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #00A6F4;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px #00a7f47a;
+        }
+
+        .cta-button:hover {
+            background: #0095db;
+        }
+
+        .footer {
+            background-color: #020618;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #00a7f464;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #00A6F4;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <img src="https://d5osvdbc8um23.cloudfront.net/static-asset/images/logo.png" alt="Roundz.ai Logo">
+                </div>
+                <h1>Pending Interview Reminder</h1>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <div class="intro-text">
+                    <p>Hi,</p>
+                    <p>We noticed that you have a pending interview waiting for you.</p>
+                    <p>Don't let this opportunity slip by! Complete your interview now to move forward in the process.
+                    </p>
+                </div>
+
+                <div class="cta-section">
+                    <a href="{{action_url}}" class="cta-button">Go to My Interviews</a>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-links">
+                    <a href="https://roundz.ai">Home</a>
+                    <a href="https://roundz.ai/community">Community</a>
+                    <a href="https://roundz.ai/blog">Blog</a>
+                    <a href="https://roundz.ai/interviews">Interviews</a>
+                    <a href="https://roundz.ai/contact-us">Contact Us</a>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/company/roundz-ai">LinkedIn</a>
+                    <a href="https://x.com/roundz_ai">Twitter</a>
+                    <a href="https://discord.com/invite/6DgrhnxD">Discord</a>
+                </div>
+
+                <div class="footer-text">
+                    <p>&copy; 2026 Roundz AI. All rights reserved.</p>
+                    <p style="margin-top: 10px;">
+                        AI-Powered Interview Platform
+                    </p>
+                </div>
+
+                <!--
+                <div class="unsubscribe">
+                    <a href="{{unsubscribeUrl}}">Unsubscribe from weekly digest</a> | 
+                    <a href="{{preferencesUrl}}">Manage email preferences</a>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

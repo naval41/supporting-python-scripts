@@ -39,3 +39,186 @@ CREATE TABLE public."CandidateInterview" (
 );
 CREATE INDEX "CandidateInterview_mockInterviewId_idx" ON public."CandidateInterview" USING btree ("mockInterviewId");
 CREATE INDEX "CandidateInterview_userId_idx" ON public."CandidateInterview" USING btree ("userId");
+
+
+CREATE TABLE public."UserProfile" (
+    id text NOT NULL,
+    "userId" text NOT NULL,
+    "name" text NOT NULL,
+    headline text NOT NULL,
+    "location" text NULL,
+    "phoneNumber" text NULL,
+    "linkTree" jsonb NULL,
+    skills _text NULL,
+    languages _text NULL,
+    about text NULL,
+    "companyId" text NULL,
+    "jobProfileId" text NULL,
+    "jobRoleId" text NULL,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    CONSTRAINT "UserProfile_pkey" PRIMARY KEY (id),
+    CONSTRAINT "UserProfile_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES public."Company"(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "UserProfile_jobProfileId_fkey" FOREIGN KEY ("jobProfileId") REFERENCES public."JobProfile"(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "UserProfile_jobRoleId_fkey" FOREIGN KEY ("jobRoleId") REFERENCES public."JobRole"(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."User"(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+CREATE UNIQUE INDEX "UserProfile_userId_key" ON public."UserProfile" USING btree ("userId");
+
+
+
+CREATE TABLE public."CommunityGroup" (
+    id text NOT NULL,
+    "name" text NOT NULL,
+    slug text NOT NULL,
+    description text NULL,
+    "type" public."GroupType" NOT NULL,
+    "imageUrl" text NULL,
+    "isPrivate" bool NOT NULL DEFAULT false,
+    "memberCount" int4 NOT NULL DEFAULT 0,
+    tags _text NULL,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "CommunityGroup_pkey" PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX "CommunityGroup_slug_key" ON public."CommunityGroup" USING btree (slug);
+
+
+
+CREATE TABLE public."GroupPost" (
+    id text NOT NULL,
+    "groupId" text NOT NULL,
+    "userId" text NOT NULL,
+    "content" text NULL,
+    "type" public."PostType" NOT NULL,
+    visibility public."PostVisibility" NOT NULL,
+    metadata jsonb NOT NULL,
+    "mediaLinkUrl" text NULL,
+    "thumbnailUrl" text NULL,
+    upvotes int4 NOT NULL DEFAULT 0,
+    downvotes int4 NOT NULL DEFAULT 0,
+    "comments" int4 NOT NULL DEFAULT 0,
+    shares int4 NOT NULL DEFAULT 0,
+    "views" int4 NOT NULL DEFAULT 0,
+    "isEdited" bool NOT NULL DEFAULT false,
+    "isPinned" bool NOT NULL DEFAULT false,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "GroupPost_pkey" PRIMARY KEY (id),
+    CONSTRAINT "GroupPost_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES public."CommunityGroup"(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "GroupPost_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."User"(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+
+CREATE TABLE public."Blog" (
+    id text NOT NULL,
+    title text NOT NULL,
+    excerpt text NOT NULL,
+    "content" text NOT NULL,
+    author text NOT NULL,
+    "date" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    image text NULL,
+    slug text NOT NULL,
+    tags _text NULL,
+    "readTime" int4 NOT NULL DEFAULT 5,
+    published bool NOT NULL DEFAULT true,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    CONSTRAINT "Blog_pkey" PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX "Blog_slug_key" ON public."Blog" USING btree (slug);
+
+
+
+CREATE TABLE public."Interview" (
+    id text NOT NULL,
+    "companyId" text NOT NULL,
+    "userId" text NOT NULL,
+    "jobRoleId" text NOT NULL,
+    slug text NULL,
+    title text NOT NULL,
+    "location" text NULL,
+    "date" timestamp(3) NOT NULL,
+    difficulty public."InterviewDifficulty" NOT NULL,
+    "noOfRounds" int4 NOT NULL,
+    "interviewProcess" text NULL,
+    "preparationSources" text NULL,
+    "finalThoughts" text NULL,
+    "keyTakeaways" text NULL,
+    "overallRating" float8 NOT NULL,
+    "isAnonymous" bool NOT NULL DEFAULT false,
+    status public."InterviewStatus" NOT NULL DEFAULT 'DRAFT'::"InterviewStatus",
+    "offerStatus" public."OfferStatus" NOT NULL DEFAULT 'PENDING'::"OfferStatus",
+    tags _text NULL,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    "createdBy" text NOT NULL,
+    "updatedBy" text NOT NULL,
+    CONSTRAINT "Interview_pkey" PRIMARY KEY (id),
+    CONSTRAINT "Interview_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES public."Company"(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Interview_jobRoleId_fkey" FOREIGN KEY ("jobRoleId") REFERENCES public."JobRole"(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Interview_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."User"(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+CREATE INDEX "Interview_companyId_idx" ON public."Interview" USING btree ("companyId");
+CREATE INDEX "Interview_jobRoleId_idx" ON public."Interview" USING btree ("jobRoleId");
+CREATE UNIQUE INDEX "Interview_slug_key" ON public."Interview" USING btree (slug);
+CREATE INDEX "Interview_userId_idx" ON public."Interview" USING btree ("userId");
+
+
+CREATE TABLE public."Company" (
+    id text NOT NULL,
+    "name" text NOT NULL,
+    slug text NOT NULL,
+    "logoUrl" text NULL,
+    description text NOT NULL,
+    "noEmployees" text NULL,
+    "noOfInterviews" int4 NOT NULL DEFAULT 0,
+    industry text NULL,
+    website text NULL,
+    "headquarterLocation" text NULL,
+    rating float8 NULL,
+    reviews int4 NULL,
+    "isVerified" bool NOT NULL DEFAULT false,
+    "linkTree" jsonb NULL,
+    "foundedYear" text NULL,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    "createdBy" text NOT NULL,
+    "updatedBy" text NOT NULL,
+    CONSTRAINT "Company_pkey" PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX "Company_slug_key" ON public."Company" USING btree (slug);
+
+
+
+CREATE TABLE public."JobProfile" (
+    id text NOT NULL,
+    "name" text NOT NULL,
+    description text NULL,
+    slug text NOT NULL,
+    "companyId" text NOT NULL,
+    "isActive" bool NOT NULL DEFAULT true,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    CONSTRAINT "JobProfile_pkey" PRIMARY KEY (id),
+    CONSTRAINT "JobProfile_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES public."Company"(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+
+
+CREATE TABLE public."JobRole" (
+    id text NOT NULL,
+    "name" text NOT NULL,
+    description text NULL,
+    slug text NOT NULL,
+    "roleOrder" int4 NOT NULL DEFAULT 0,
+    "roleStartIndex" int4 NOT NULL DEFAULT 0,
+    "roleEndIndex" int4 NOT NULL DEFAULT 0,
+    "roleLevel" text NOT NULL,
+    "jobProfileId" text NOT NULL,
+    "isActive" bool NOT NULL DEFAULT true,
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    CONSTRAINT "JobRole_pkey" PRIMARY KEY (id),
+    CONSTRAINT "JobRole_jobProfileId_fkey" FOREIGN KEY ("jobProfileId") REFERENCES public."JobProfile"(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);

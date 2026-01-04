@@ -16,8 +16,16 @@ class AWSHelper:
             return boto3.client(service, region_name=region_name)
             
         # Support nested config (e.g. config['bedrock']) or flat config
-        service_config = self.config.get(service, self.config)
+        service_config = self.config.get(service)
         
+        # Special case for bedrock-runtime -> bedrock config key
+        if not service_config and (service == 'bedrock_runtime' or service == 'bedrock-runtime'):
+            service_config = self.config.get('bedrock')
+            
+        # If still not found, try to use the root config (flat structure)
+        if not service_config:
+            service_config = self.config
+
         session = boto3.Session(
             aws_access_key_id=service_config.get('aws_access_key_id'),
             aws_secret_access_key=service_config.get('aws_secret_access_key'),
