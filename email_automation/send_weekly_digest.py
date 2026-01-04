@@ -129,7 +129,7 @@ def fetch_data(db_helper: DBHelper, start_date: datetime.date, end_date: datetim
             'rounds': row['noOfRounds'],
             'difficulty': row['difficulty'],
             'excerpt': excerpt,
-            'url': f"https://roundz.ai/interview/{row['slug']}"
+            'url': f"https://roundz.ai/interviews/{row['id']}/{row['slug']}"
         })
 
     return {
