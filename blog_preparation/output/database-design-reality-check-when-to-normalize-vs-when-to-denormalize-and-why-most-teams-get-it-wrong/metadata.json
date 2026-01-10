@@ -1,7 +1,0 @@
-{
-    "title": "Database Design Reality Check: When to Normalize vs When to Denormalize (And Why Most Teams Get It Wrong)",
-    "excerpt": "Look, I've been building systems for years, and I can't tell you how many times I've walked into a project where someone decided to \"optimize\" their database by throwing normalization out the window. Or worse, they've normalized everything to death and wonder why their reports take forever to load.",
-    "slug": "database-design-reality-check-when-to-normalize-vs-when-to-denormalize-and-why-most-teams-get-it-wrong",
-    "time_to_read": "12 min read",
-    "tags": "database design, normalization, denormalization, performance optimization, database architecture"
-}
