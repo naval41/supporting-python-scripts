@@ -2,3 +2,8 @@ boto3
 psycopg2-binary
 jinja2
 markdown
+langgraph
+langchain
+langchain-aws
+tavily-python
+pandas
