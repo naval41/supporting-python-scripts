@@ -31,11 +31,17 @@ __pycache__/
 # *.gif
 
 # Output directories (if they contain generated files)
-# blog_preparation/output/
+blog_preparation/output/
+blog_preparation/input/
 # image_creation/outputs/
 # image_creation/gray_outputs/
 # image_creation/outputs_bgp/
 
 # Logs
 *.log
+
+
+
+
+
 
