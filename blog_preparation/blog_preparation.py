@@ -2,9 +2,16 @@ import boto3
 import json
 import os
 import re
+import shutil
 from pathlib import Path
 from typing import Dict, Any
 import html
+import sys
+# Add parent directory to sys.path to allow importing util
+sys.path.append(str(Path(__file__).parent.parent))
+
+from util.aws_helper import AWSHelper
+from util.config import Config
 from twitter_post import call_bedrock_for_twitter_thread
 
 # Load environment variables from .env file if it exists
@@ -25,81 +32,7 @@ def load_env_file():
 load_env_file()
 
 
-def load_aws_config(config_file: Path) -> Dict[str, Any]:
-    """
-    Load AWS configuration from config file.
-    
-    Supports two formats:
-    1. Flat structure (backward compatible):
-       {"aws_access_key_id": "...", "aws_secret_access_key": "..."}
-    2. Nested structure (for separate credentials):
-       {"s3": {"aws_access_key_id": "...", ...}, "bedrock": {"aws_access_key_id": "...", ...}}
-    
-    Args:
-        config_file: Path to the config file
-        
-    Returns:
-        Dictionary containing AWS configuration
-    """
-    try:
-        with open(config_file, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-        return config
-    except Exception as e:
-        print(f"Error loading config file: {e}")
-        return {}
-
-
-def create_bedrock_client(config: Dict[str, Any]) -> any:
-    """
-    Create boto3 bedrock client with credentials from config.
-    
-    Args:
-        config: AWS configuration dictionary (can be nested with 'bedrock' key or flat)
-        
-    Returns:
-        boto3 bedrock client
-    """
-    try:
-        # Support nested config structure: config['bedrock'] or flat structure
-        bedrock_config = config.get('bedrock', config)
-        
-        session = boto3.Session(
-            aws_access_key_id=bedrock_config.get('aws_access_key_id'),
-            aws_secret_access_key=bedrock_config.get('aws_secret_access_key'),
-            region_name='ap-south-1'
-        )
-        bedrock = session.client(service_name='bedrock-runtime')
-        return bedrock
-    except Exception as e:
-        print(f"Error creating Bedrock client: {e}")
-        return None
-
-
-def create_s3_client(config: Dict[str, Any]) -> any:
-    """
-    Create boto3 S3 client with credentials from config.
-    
-    Args:
-        config: AWS configuration dictionary (can be nested with 's3' key or flat)
-        
-    Returns:
-        boto3 S3 client
-    """
-    try:
-        # Support nested config structure: config['s3'] or flat structure
-        s3_config = config.get('s3', config)
-        
-        session = boto3.Session(
-            aws_access_key_id=s3_config.get('aws_access_key_id'),
-            aws_secret_access_key=s3_config.get('aws_secret_access_key'),
-            region_name='ap-south-1'
-        )
-        s3 = session.client('s3')
-        return s3
-    except Exception as e:
-        print(f"Error creating S3 client: {e}")
-        return None
+# Local config loading and client creation functions removed - replaced by util package
 
 
 def call_bedrock_for_metadata(bedrock_client, markdown_content: str, model_id: str) -> Dict[str, Any]:
@@ -120,10 +53,10 @@ def call_bedrock_for_metadata(bedrock_client, markdown_content: str, model_id: s
         prompt = """Extract the following information from this blog post and return ONLY a JSON object with these exact keys:
 {
   "title": "Title of the blog",
-  "excerpt": "A concise summary of the article in 300 characters. It should be SEO and AEO and Agent friendly.",
   "slug": "url-friendly-slug",
   "time_to_read": "X min read",
-  "tags": "tag1, tag2, tag3"
+  "tags": "tag1, tag2, tag3",
+  "excerpt": "A concise summary of the article in 300 characters. It should be SEO and AEO and Agent friendly.",
 }
 
 Rules:
@@ -223,6 +156,48 @@ def upload_images_to_s3(s3_client, slug: str, images_dir: Path, bucket_name: str
             
     except Exception as e:
         print(f"Error uploading images to S3: {e}")
+
+
+def copy_images_to_output(images_dir: Path, output_dir: Path):
+    """
+    Copy all images from input/images directory to output directory.
+    
+    Args:
+        images_dir: Local directory containing images (input/images)
+        output_dir: Output directory where images should be copied (output/slug)
+    """
+    try:
+        if not images_dir.exists() or not images_dir.is_dir():
+            print(f"Warning: Images directory not found at {images_dir}")
+            return
+        
+        # Create Images folder in output directory
+        output_images_dir = output_dir / "Images"
+        output_images_dir.mkdir(parents=True, exist_ok=True)
+        
+        print(f"Copying images to {output_images_dir}")
+        
+        # List all image files
+        image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+        image_files = [
+            f for f in images_dir.iterdir() 
+            if f.is_file() and f.suffix.lower() in image_extensions
+        ]
+        
+        if not image_files:
+            print(f"Warning: No image files found in {images_dir}")
+            return
+        
+        # Copy each image file
+        for image_file in image_files:
+            dest_file = output_images_dir / image_file.name
+            shutil.copy2(image_file, dest_file)
+            print(f"Copied {image_file.name} to {dest_file}")
+        
+        print(f"Successfully copied {len(image_files)} image(s) to {output_images_dir}")
+        
+    except Exception as e:
+        print(f"Error copying images to output directory: {e}")
 
 
 def _to_unicode_styled(text: str, style: str) -> str:
@@ -392,7 +367,7 @@ Style specifics
 • Use short statements and avoid repetitive phrasing.
 • Use moderate emojis, e.g., one emoji per bullet and 1–2 elsewhere max.
 • Emphasize learning and practical advice for engineers.
-• End with an inviting call to action: encourage readers to connect with or subscribe to Roundz.ai, or read the full blog at the provided placeholder URL. Provide the CTA naturally as a sentence. Use a clear, friendly close: invite comments, reactions, or questions.
+• End with an inviting call to action: encourage readers to join our Discord community at https://discord.com/invite/4UZr8q48 for discussions, networking, and more insights. Provide the CTA naturally as a sentence. Use a clear, friendly close: invite comments, reactions, or questions.
 
 Formatting rules (must follow)
 • Use bold and italic for emphasis.
@@ -457,17 +432,17 @@ That's when concepts click.
 
 This is exactly why we built Layrs (layrs.me). Interactive canvas, real problems, instant feedback on your designs.
 
-Join our discord: [DISCORD_LINK]
+Join our Discord community at https://discord.com/invite/4UZr8q48 for more discussions, networking, and insights from fellow engineers!
 
 No one expects perfection.
 
 They want to see you think through real constraints and explain your choices clearly."
 
 Closing CTA requirement (include one of these options in the post):
-• Option A: Invite readers to connect with or subscribe to Roundz.ai for more practice and interactive system design content. Phrase it naturally, not salesy.
-• Option B: Invite readers to read the full blog at [BLOG_URL] or visit Roundz.ai to explore practice problems and interactive canvases. Use [BLOG_URL] as a placeholder if needed.
+• Option A: Invite readers to join our Discord community at https://discord.com/invite/4UZr8q48 for discussions, networking, and more insights from fellow engineers. Phrase it naturally, not salesy.
+• Option B: Invite readers to read the full blog at [BLOG_URL] and join our Discord community at https://discord.gg/6DgrhnxD to continue the conversation with other engineers.
 
-Deliverable: Return a single LinkedIn post that follows every instruction above, uses the blog content, and ends with the required CTA.**
+Deliverable: Return a single LinkedIn post that follows every instruction above, uses the blog content, and ends with the required CTA that includes the Discord invitation.**
 </sample_linkedin_post_example>
 """
         
@@ -491,15 +466,46 @@ Deliverable: Return a single LinkedIn post that follows every instruction above,
             }
         )
         
+        # Check if response has the expected structure
+        if 'output' not in response:
+            print(f"Error: Unexpected response structure - no 'output' key. Response: {response}")
+            return ""
+        
+        if 'message' not in response['output']:
+            print(f"Error: Unexpected response structure - no 'message' key. Response: {response}")
+            return ""
+        
+        if 'content' not in response['output']['message']:
+            print(f"Error: Unexpected response structure - no 'content' key. Response: {response}")
+            return ""
+        
+        if not response['output']['message']['content']:
+            print(f"Error: Empty content in response. Response: {response}")
+            return ""
+        
         post_content = response['output']['message']['content'][0]['text']
+        
+        if not post_content or not post_content.strip():
+            print(f"Error: Empty post content received from Bedrock API")
+            return ""
         
         # Convert markdown formatting to LinkedIn-compatible format using configured style
         post_content = format_linkedin_content(post_content)
         
+        print(f"Successfully generated LinkedIn post ({len(post_content)} characters)")
         return post_content
         
+    except KeyError as e:
+        print(f"Error: Missing key in Bedrock response: {e}")
+        try:
+            print(f"Response structure: {response}")
+        except NameError:
+            print("Response was not received before error occurred")
+        return ""
     except Exception as e:
         print(f"Error calling Bedrock API for LinkedIn post: {e}")
+        import traceback
+        traceback.print_exc()
         return ""
 
 
@@ -591,7 +597,8 @@ def main():
     
     # Load AWS configuration
     print("Loading AWS configuration...")
-    aws_config = load_aws_config(config_file)
+    # Use centralized config loading
+    aws_config = Config.load_aws_config(str(config_file))
     
     if not aws_config:
         print("Error: Failed to load AWS configuration")
@@ -599,9 +606,10 @@ def main():
     
     # Create AWS clients
     print("Creating AWS clients...")
-    # Use separate credentials for Bedrock and S3
-    bedrock_client = create_bedrock_client(aws_config)
-    s3_client = create_s3_client(aws_config)
+    # Use generic AWSHelper
+    aws_helper = AWSHelper(aws_config)
+    bedrock_client = aws_helper.get_bedrock_client()
+    s3_client = aws_helper.get_s3_client()
     
     if not bedrock_client:
         print("Error: Failed to create Bedrock client")
@@ -655,6 +663,13 @@ def main():
     else:
         print(f"Warning: Images directory not found at {images_dir}")
     
+    # Step 2.5: Copy images to output directory
+    print("\n=== Step 2.5: Copying Images to Output Directory ===")
+    if images_dir.exists() and images_dir.is_dir():
+        copy_images_to_output(images_dir, slug_output_dir)
+    else:
+        print(f"Warning: Images directory not found at {images_dir}, skipping image copy")
+    
     # Step 3: Update markdown with CDN URLs
     print("\n=== Step 3: Updating Markdown with CDN URLs ===")
     updated_markdown = update_markdown_images(markdown_content, slug, images_dir, cdn_base_url)
@@ -670,11 +685,13 @@ def main():
     print("\n=== Step 4: Generating LinkedIn Post ===")
     linkedin_post = call_bedrock_for_linkedin_post(bedrock_client, updated_markdown, metadata, model_id)
     
-    if linkedin_post:
+    if linkedin_post and linkedin_post.strip():
         linkedin_post_file = slug_output_dir / "linkedin_post.txt"
         with open(linkedin_post_file, 'w', encoding='utf-8') as f:
             f.write(linkedin_post)
         print(f"LinkedIn post saved to {linkedin_post_file}")
+    else:
+        print(f"Warning: LinkedIn post generation failed or returned empty content. No file created.")
     
     # Step 5: Generate carousel content
     print("\n=== Step 5: Generating Carousel Content ===")

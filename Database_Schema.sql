@@ -222,3 +222,20 @@ CREATE TABLE public."JobRole" (
     CONSTRAINT "JobRole_pkey" PRIMARY KEY (id),
     CONSTRAINT "JobRole_jobProfileId_fkey" FOREIGN KEY ("jobProfileId") REFERENCES public."JobProfile"(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+
+CREATE TABLE public."InterviewRound" (
+	id text NOT NULL,
+	"interviewId" text NOT NULL,
+	"name" text NOT NULL,
+	duration text NULL,
+	difficulty public."InterviewDifficulty" NOT NULL,
+	experience text NOT NULL,
+	"keyTakeaways" text NULL,
+	"orderIndex" int4 NOT NULL,
+	"createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"updatedAt" timestamp(3) NOT NULL,
+	CONSTRAINT "InterviewRound_pkey" PRIMARY KEY (id),
+	CONSTRAINT "InterviewRound_interviewId_fkey" FOREIGN KEY ("interviewId") REFERENCES public."Interview"(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+CREATE INDEX "InterviewRound_interviewId_idx" ON public."InterviewRound" USING btree ("interviewId");

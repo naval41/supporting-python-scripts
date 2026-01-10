@@ -64,3 +64,43 @@ python3 email_automation/send_weekly_digest.py --week <WEEK_NUMBER> --year <YEAR
     - **Interviews**: Top 2 `Interview` records created in the week, ordered by date.
 - **Template**: `email_automation/templates/weekly_digest.html` (Jinja2 format).
 - **Users**: Sends to all users where `emailValidated = true`.
+
+---
+
+## 3. Roundz Introduction Email (`send_roundz_introduction.py`)
+
+Sends a one-off introduction email to a list of candidates provided in a CSV file. The email body is rendered from Markdown to HTML.
+
+### Usage
+
+**1. Prepare CSV File**
+Create a CSV file (default: `candidates.csv`) with `Name` and `Email` columns:
+```csv
+Name,Email
+John Doe,john@example.com
+Jane Smith,jane@test.com
+```
+
+**2. Dry Run** (Preview without sending):
+```bash
+python3 email_automation/send_roundz_introduction.py --csv path/to/candidates.csv
+```
+
+**3. Test Mode** (Send all emails to a specific address for verification):
+```bash
+python3 email_automation/send_roundz_introduction.py --csv path/to/candidates.csv --send --test-email your_email@example.com
+```
+
+**4. Send Mode** (Send actual emails to candidates):
+```bash
+python3 email_automation/send_roundz_introduction.py --csv path/to/candidates.csv --send
+```
+
+### Logic
+- **Input**: CSV file with `Name` and `Email`.
+- **Processing**: 
+    - Names are formatted to Pascal Case (e.g., "john doe" -> "John Doe").
+    - Email body (Markdown) is converted to HTML using the `markdown` library.
+    - Wrapped in a basic HTML container for styling.
+- **Output**: Sends an HTML email with the subject "Your Interview Prep Journey".
+
