@@ -117,7 +117,7 @@ def fetch_data(db_helper: DBHelper, start_date: datetime.date, end_date: datetim
         
         interviews.append({
             'companyName': row['company_name'],
-            'companyLogo': f"https://d5osvdbc8um23.cloudfront.net/static-asset/company/320x320/{row['company_logo']}",
+            'companyLogo': f"https://d5osvdbc8um23.cloudfront.net/static-asset/company/320x320/{row['company_logo']}" if row['company_logo'] else None,
             'companyInitial': row['company_name'][0] if row['company_name'] else '?',
             'position': row['title'], # Using title as position
             'status': 'Verified', # Placeholder, maybe check status column
