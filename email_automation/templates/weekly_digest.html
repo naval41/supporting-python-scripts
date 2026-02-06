@@ -705,6 +705,12 @@
                         </div>
                         <span class="blog-category">{{story.groupName}}</span>
                         <div class="blog-excerpt">{{story.excerpt}}</div>
+
+                        {% if story.imageUrl %}
+                        <div class="story-image">
+                            <img src="{{story.imageUrl}}" alt="{{story.title}}">
+                        </div>
+                        {% endif %}
                         <div class="blog-footer">
                             <div>
                                 <div class="blog-author">By {{story.author}}</div>
@@ -712,11 +718,6 @@
                             <a href="{{story.url}}" class="read-more">Read More →</a>
                         </div>
                     </div>
-                    {% if story.imageUrl %}
-                    <div class="story-image">
-                        <img src="{{story.imageUrl}}" alt="{{story.title}}">
-                    </div>
-                    {% endif %}
                 </div>
                 {% endfor %}
 
