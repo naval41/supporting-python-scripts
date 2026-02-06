@@ -699,16 +699,11 @@
 
                 {% for story in topStories %}
                 <div class="story-card">
-                    {% if story.imageUrl %}
-                    <div class="story-image">
-                        <img src="{{story.imageUrl}}" alt="{{story.title}}">
-                    </div>
-                    {% endif %}
                     <div class="blog-content">
-                        <span class="blog-category">{{story.groupName}}</span>
                         <div class="blog-title">
                             <a href="{{story.url}}">{{story.title}}</a>
                         </div>
+                        <span class="blog-category">{{story.groupName}}</span>
                         <div class="blog-excerpt">{{story.excerpt}}</div>
                         <div class="blog-footer">
                             <div>
@@ -717,6 +712,11 @@
                             <a href="{{story.url}}" class="read-more">Read More →</a>
                         </div>
                     </div>
+                    {% if story.imageUrl %}
+                    <div class="story-image">
+                        <img src="{{story.imageUrl}}" alt="{{story.title}}">
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
 
