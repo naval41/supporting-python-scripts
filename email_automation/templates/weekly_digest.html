@@ -704,17 +704,17 @@
                         <img src="{{story.imageUrl}}" alt="{{story.title}}">
                     </div>
                     {% endif %}
-                    <div class="story-header">
-                        <div class="story-content">
-                            <div class="story-title">
-                                <a href="{{story.url}}">{{story.title}}</a>
+                    <div class="blog-content">
+                        <span class="blog-category">{{story.groupName}}</span>
+                        <div class="blog-title">
+                            <a href="{{blog.url}}">{{story.title}}</a>
+                        </div>
+                        <div class="blog-excerpt">{{story.excerpt}}</div>
+                        <div class="blog-footer">
+                            <div>
+                                <div class="blog-author">By {{story.author}}</div>
                             </div>
-                            <div class="story-meta">
-                                <span class="meta-item">{{story.author}}</span>
-                                <span class="meta-item">{{story.groupName}}</span>
-                                <span class="meta-item">{{story.engagementCount}} engagements</span>
-                            </div>
-                            <div class="story-excerpt">{{story.excerpt}}</div>
+                            <a href="{{story.url}}" class="read-more">Read More →</a>
                         </div>
                     </div>
                 </div>
