@@ -103,7 +103,7 @@ def main():
     SELECT u.id, u.email, up.name
     FROM "User" u
     LEFT JOIN "UserProfile" up ON u.id = up."userId"
-    WHERE u."createdAt" >= NOW() - INTERVAL '1 day'
+    WHERE u."createdAt" >= NOW() - INTERVAL '2 day'
     """
     
     try:
